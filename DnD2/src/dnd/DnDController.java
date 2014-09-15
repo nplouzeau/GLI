@@ -8,6 +8,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.control.Slider;
+import javafx.scene.input.*;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
@@ -36,8 +37,15 @@ public class DnDController implements Initializable {
         for (int i = 0; i < initialNumberOfTexts.getValue(); i++) {
             int x = randomGenerator.nextInt((int) textsPane.getWidth());
             int y = randomGenerator.nextInt((int) textsPane.getHeight());
-            Text newText = new Text(x,y,Integer.toHexString(randomGenerator.nextInt()));
+            Text newText = new Text(x, y, Integer.toHexString(randomGenerator.nextInt()));
             newText.setFill(Color.BLACK);
+            newText.setOnDragDetected(de -> onDragDetected(de, newText));
+            newText.setOnDragEntered(de -> onDragEntered(de, newText));
+            newText.setOnDragExited(de -> onDragExited(de, newText));
+            newText.setOnDragOver(de -> onDragOver(de, newText));
+
+            newText.setOnDragDropped(de -> onDragDropped(de, newText));
+            newText.setOnDragDone(de -> onDragDone(de, newText));
             textsPane.getChildren().add(newText);
         }
 
@@ -53,6 +61,43 @@ public class DnDController implements Initializable {
     void showAboutScene(ActionEvent event) {
 
 
+    }
+
+    private void onDragDetected(MouseEvent mouseEvent, Text source) {
+
+        Dragboard dragBoard = source.startDragAndDrop(TransferMode.ANY);
+        ClipboardContent content = new ClipboardContent();
+        content.putString(source.getText());
+        dragBoard.setContent(content);
+        mouseEvent.consume();
+    }
+
+    private void onDragDone(DragEvent dragEvent, Text source) {
+        textsPane.getChildren().remove(source);
+        dragEvent.getDragboard().clear();
+        dragEvent.consume();
+    }
+    private void onDragEntered(DragEvent dragEvent, Text target) {
+        if (target != dragEvent.getGestureSource())   {
+            target.setFill(Color.GREEN);
+        }
+
+        dragEvent.consume();
+    }
+
+    private void onDragExited(DragEvent dragEvent, Text target) {
+        target.setFill(Color.BLACK);
+        dragEvent.consume();
+    }
+
+    private void onDragOver(DragEvent dragEvent, Text target) {
+        dragEvent.acceptTransferModes(TransferMode.MOVE);     // State that a drop is possible
+        dragEvent.consume();
+    }
+    private void onDragDropped(DragEvent dragEvent, Text target) {
+        target.setText(target.getText()+dragEvent.getDragboard().getString());
+        dragEvent.setDropCompleted(true);
+        dragEvent.consume();
     }
 
     @Override
