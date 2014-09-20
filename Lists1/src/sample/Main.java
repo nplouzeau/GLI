@@ -13,10 +13,11 @@ import javafx.stage.Stage;
 
 public class Main extends Application {
 
-    private final ObservableList<String> modelList = FXCollections.observableArrayList("1");;
+    private final ObservableList<String> modelList = FXCollections.observableArrayList("1");
+    ;
 
     @Override
-    public void start(Stage primaryStage) throws Exception{
+    public void start(Stage primaryStage) throws Exception {
         BorderPane root = new BorderPane();
 
         MenuBar menuBar = new MenuBar();
@@ -27,7 +28,12 @@ public class Main extends Application {
 
         MenuItem removeMenuItem = new MenuItem("Remove");
         listMenu.getItems().add(removeMenuItem);
-        removeMenuItem.setOnAction(event -> modelList.remove(0));
+        removeMenuItem.setOnAction(event ->
+        {
+            if (modelList.size() > 0) {
+                modelList.remove(0);
+            }
+        });
         menuBar.getMenus().add(listMenu);
         root.setTop(menuBar);
 
