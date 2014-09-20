@@ -23,13 +23,16 @@ public class Main extends Application {
         MenuBar menuBar = new MenuBar();
         Menu listMenu = new Menu("List");
         MenuItem addMenuItem = new MenuItem("Add");
+        // Append some item to the modelList, to demo the automatic view refresh
         addMenuItem.setOnAction(event -> modelList.add(Integer.toString(modelList.size())));
         listMenu.getItems().add(addMenuItem);
 
+        // Ditto for remove
         MenuItem removeMenuItem = new MenuItem("Remove");
         listMenu.getItems().add(removeMenuItem);
         removeMenuItem.setOnAction(event ->
         {
+            // No removing on an empty modelList
             if (modelList.size() > 0) {
                 modelList.remove(0);
             }
@@ -37,7 +40,7 @@ public class Main extends Application {
         menuBar.getMenus().add(listMenu);
         root.setTop(menuBar);
 
-        // Now the view
+        // Now the view: set up the one way dependency modelList -> listView contents
         ListView listView = new ListView(modelList);
         root.setCenter(listView);
 
