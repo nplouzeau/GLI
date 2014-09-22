@@ -14,8 +14,8 @@
    <children>
       <HBox prefHeight="100.0" prefWidth="200.0">
          <children>
-            <fx:include source="left.fxml" />
-            <fx:include source="right.fxml" />
+            <fx:include fx:id="leftView" source="left.fxml" />
+            <fx:include fx:id="rightView" source="right.fxml" />
          </children>
       </HBox>
    </children>

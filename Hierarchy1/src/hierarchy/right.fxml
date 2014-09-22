@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.*?>
 
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="69.0" prefWidth="201.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hierarchy.RightController">
+<AnchorPane fx:id="rightView" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="69.0" prefWidth="201.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hierarchy.RightController">
    <children>
       <Label layoutX="64.0" layoutY="27.0" text="This is right" />
    </children>
