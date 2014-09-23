@@ -1,5 +1,6 @@
-package sample;
+package player;
 
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.event.Event;
 import javafx.fxml.FXML;
@@ -14,24 +15,26 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.logging.Logger;
 
-public class PlayController implements Initializable{
+public class MediaController implements Initializable {
 
-    // Injection de dépendances dans les attributs annotés FXML
+    final String soundFileName = "hal.wav";
+
+    // As usual, dependency injection between view and controller
     @FXML
-    private Button cancelButton;
+    private Button stopButton;
 
     @FXML
-    private Button doItButton;
+    private Button playItButton;
 
     @FXML
     private ProgressBar progressBar;
 
-    private Media mediaToPlay = new Media(getClass().getResource("sound.wav").toExternalForm());
+    private Media mediaToPlay = new Media(getClass().getResource(soundFileName).toExternalForm());
 
     @FXML
     private MediaPlayer player = new MediaPlayer(mediaToPlay);
 
-    private ChangeListener<Duration>  progressListener;
+    private ChangeListener<Duration> progressListener;
 
 
     @FXML
@@ -46,6 +49,12 @@ public class PlayController implements Initializable{
         player.stop();
     }
 
+
+    @FXML
+    public void quitApplication(Event e) {
+        Platform.exit();
+    }
+
     /**
      * Called to initialize a controller after its root element has been
      * completely processed.
@@ -57,8 +66,21 @@ public class PlayController implements Initializable{
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         progressBar.setProgress(0.0D);
-        player.currentTimeProperty().addListener((observableValue,oldValue,newValue)
+        playItButton.setDisable(false);
+        stopButton.setDisable(true);
+
+        player.currentTimeProperty().addListener((observableValue, oldValue, newValue)
                 -> progressBar.setProgress(newValue.toSeconds() / player.getTotalDuration().toSeconds()));
+
+
+        player.setOnPlaying(() -> {
+            playItButton.setDisable(true);
+            stopButton.setDisable(false);
+        });
+        player.setOnStopped(() -> {
+            playItButton.setDisable(false);
+            stopButton.setDisable(true);
+        });
 
     }
 }
