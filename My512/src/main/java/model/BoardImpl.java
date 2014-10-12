@@ -124,9 +124,9 @@ public class BoardImpl implements Board {
                 return sideSizeInSquares - columnIndex;
             case LEFT:
                 return columnIndex - 1;
-            case UP:
+            case TOP:
                 return lineIndex - 1;
-            case DOWN:
+            case BOTTOM:
                 return lineIndex - 1;
         }
         return 0; // NOT REACHED
@@ -148,9 +148,9 @@ public class BoardImpl implements Board {
                 return lineIndex - 1;
             case RIGHT:
                 return lineIndex - 1;
-            case DOWN:
+            case BOTTOM:
                 return sideSizeInSquares - columnIndex;
-            case UP:
+            case TOP:
                 return columnIndex - 1;
         }
         return 0; // NOT REACHED

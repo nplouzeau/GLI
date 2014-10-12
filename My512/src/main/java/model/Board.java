@@ -21,7 +21,7 @@ public interface Board {
     Tile getTile(int lineNumber, int columnNumber);
 
     public enum Direction {
-        LEFT, RIGHT, UP, DOWN;
+        LEFT, RIGHT, TOP, BOTTOM;
     }
 
     void packIntoDirection(Direction direction);
