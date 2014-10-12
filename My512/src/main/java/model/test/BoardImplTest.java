@@ -138,7 +138,7 @@ public class BoardImplTest {
      */
     @Test
     public void testPackIntoDirection30() throws Exception {
-        testBoard.loadBoard(new int[][]{{1, 2, 3}, {0, 0, 0}, {0,0,0}});
+        testBoard.loadBoard(new int[][]{{1, 2, 3}, {0, 0, 0}, {0, 0, 0}});
         testBoard.packIntoDirection(Board.Direction.BOTTOM);
         testBoard.commit();
         Assert.assertNotNull(testBoard.getTile(3, 1));
@@ -147,5 +147,45 @@ public class BoardImplTest {
         Assert.assertEquals(2, testBoard.getTile(3, 2).getRank());
         Assert.assertNotNull(testBoard.getTile(3, 3));
         Assert.assertEquals(3, testBoard.getTile(3, 3).getRank());
+
+        // To check the assertEquals ancillary operation
+        assertEquals(new int [][] {{0,0,0},{0,0,0},{1,2,3}},testBoard);
+
+    }
+
+    /*
+     * Check a fairly complex configuration.
+     * Starting from {{1, 2, 3}, {1, 1, 0}, {0,0,3}},
+     * should give {{0, 0, 0}, {0,2,3}, {2, 1, 3}}
+     */
+    @Test
+    public void testPackIntoDirection40() throws Exception {
+        testBoard.loadBoard(new int[][]{{1, 2, 3}, {1, 1, 0}, {0, 0, 3}});
+
+        testBoard.packIntoDirection(Board.Direction.BOTTOM);
+        testBoard.commit();
+        assertEquals(new int[][]{{0, 0, 0}, {0, 2, 0}, {2, 1, 4}}, testBoard);
+
+    }
+
+    /**
+     * Ancillary method to compare two boards
+     * Calls appropriate Junit Assert statements to check that provided is equal to expected
+     *
+     * @param expected the expected rank matrix
+     * @param provided the board to compare with the the one generated from the expected rank matrix
+     */
+    private void assertEquals(int[][] expected, Board provided) {
+        for (int i = 0; i < defaultBoardSize; i++) {
+            for (int j = 0; j < defaultBoardSize; j++) {
+                if (expected[i][j] != 0) {
+                    Assert.assertNotNull(provided.getTile(i + 1, j + 1));
+                    Assert.assertEquals(expected[i][j], provided.getTile(i + 1, j + 1).getRank());
+                } else {
+                    Assert.assertNull(provided.getTile(i + 1, j + 1));
+                }
+            }
+        }
+
     }
 }
