@@ -8,6 +8,8 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.logging.Logger;
+
 public class BoardImplTest {
 
     BoardImpl testBoard;
@@ -161,15 +163,16 @@ public class BoardImplTest {
     @Test
     public void testPackIntoDirection40() throws Exception {
         testBoard.loadBoard(new int[][]{{1, 2, 3}, {1, 1, 0}, {0, 0, 3}});
-
+        testBoard.printBoard(Logger.getGlobal(),"Before");
         testBoard.packIntoDirection(Board.Direction.BOTTOM);
         testBoard.commit();
         assertEquals(new int[][]{{0, 0, 0}, {0, 2, 0}, {2, 1, 4}}, testBoard);
 
+        testBoard.printBoard(Logger.getGlobal(),"After");
     }
 
     /**
-     * Ancillary method to compare two boards
+     * Ancillary operation to compare two boards
      * Calls appropriate Junit Assert statements to check that provided is equal to expected
      *
      * @param expected the expected rank matrix

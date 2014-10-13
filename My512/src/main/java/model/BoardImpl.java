@@ -1,5 +1,7 @@
 package model;
 
+import java.util.logging.Logger;
+
 /**
  * Created by plouzeau on 2014-10-09.
  */
@@ -55,7 +57,6 @@ public class BoardImpl implements Board {
         currentBoard = nextBoard;
         nextBoard = new Tile[sideSizeInSquares][sideSizeInSquares];
     }
-
 
 
     private void packLine(int lineNumber) {
@@ -169,6 +170,25 @@ public class BoardImpl implements Board {
                     currentBoard[i][j] = new TileImpl(rankMatrix[i][j]);
                 }
             }
+        }
+    }
+
+    public void printBoard(Logger logger, String message) {
+
+        logger.info(message);
+        for (int i = 0; i < sideSizeInSquares; i++) {
+            StringBuffer outputBuffer = new StringBuffer();
+            outputBuffer.append(i+1);
+            outputBuffer.append(":{");
+            for (int j = 0; j < sideSizeInSquares; j++) {
+                if (currentBoard[i][j] != null) {
+                    outputBuffer.append(currentBoard[i][j].getRank());
+                } else {
+                    outputBuffer.append("0");
+                }
+            }
+            outputBuffer.append("}");
+            logger.info(outputBuffer.toString());
         }
     }
 }
