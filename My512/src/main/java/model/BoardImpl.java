@@ -42,6 +42,10 @@ public class BoardImpl implements Board {
         return currentBoard[lineNumber - 1][columnNumber - 1];
     }
 
+    /**
+     * Apply the only game action: packing tiles
+     * @param direction  where to push the tiles
+     */
     @Override
     public void packIntoDirection(Direction direction) {
         this.directionToPackInto = direction;
@@ -51,6 +55,10 @@ public class BoardImpl implements Board {
 
     }
 
+    /**
+     * Validate the step effects
+     * NOTE: do we need this in the interface?
+     */
     @Override
     public void commit() {
 
@@ -91,17 +99,31 @@ public class BoardImpl implements Board {
                 writeIndex++;
                 writeTile(nextBoard, readTile(currentBoard, lineNumber, readIndex), lineNumber, writeIndex);
             }
-            // Done with the tile read, move forward
+            // Done with the current tile read, move forward
             readIndex++;
         }
 
 
     }
 
+    /**
+     * Writes a tile into a matrix (board) using indices transformation
+     * @param board       destination
+     * @param tile        what to write at the given coordinates
+     * @param lineIndex   coordinate
+     * @param columnIndex  coordinate
+     */
     private void writeTile(Tile[][] board, Tile tile, int lineIndex, int columnIndex) {
         board[computeLineIndex(lineIndex, columnIndex)][computeColumnIndex(lineIndex, columnIndex)] = tile;
     }
 
+    /**
+     * Returns a tile  from a matrix (board) using indices transformation
+     * @param board      origin
+     * @param lineIndex   coordinate
+     * @param columnIndex  coordinate
+     * @return    tile at the given coordinates or null if no tile there
+     */
     private Tile readTile(Tile[][] board, int lineIndex, int columnIndex) {
         int boardLineIndex = computeLineIndex(lineIndex, columnIndex);
         int boardColumnIndex = computeColumnIndex(lineIndex, columnIndex);
@@ -113,7 +135,10 @@ public class BoardImpl implements Board {
      * Adds a level of indirection in the index computation
      * In practice provides a rotation/symmetry so that we need
      * to deal with one packing directionToPackInto only.
-     * !! Note that NO CHECKS are made on parameter bounds.
+     * This operation also takes care of the conversion from (1..N) board
+     * coordinates to the (0..N-1) Java array coordinates.
+     *
+     * NOTE: <b>NO CHECKS are made on parameter bounds.</b>
      *
      * @param lineIndex   must be in [1..sideSizeInSquares]
      * @param columnIndex must be in [1..sideSizeInSquares]
@@ -122,9 +147,9 @@ public class BoardImpl implements Board {
     private int computeColumnIndex(int lineIndex, int columnIndex) {
         switch (directionToPackInto) {
             case RIGHT:
-                return sideSizeInSquares - columnIndex;
+                return sideSizeInSquares - columnIndex;     //Symmetry on a vertical axis
             case LEFT:
-                return columnIndex - 1;
+                return columnIndex - 1;      //
             case TOP:
                 return lineIndex - 1;
             case BOTTOM:
@@ -137,7 +162,10 @@ public class BoardImpl implements Board {
      * Adds a level of indirection in the index computation
      * In practice provides a rotation/symmetry so that we need
      * to deal with one packing directionToPackInto only.
-     * !! Note that NO CHECKS are made on parameter bounds.
+     * This operation also takes care of the conversion from (1..N) board
+     * coordinates to the (0..N-1) Java array coordinates.
+     *
+     * NOTE: <b>NO CHECKS are made on parameter bounds.</b>
      *
      * @param lineIndex   must be in [1..sideSizeInSquares]
      * @param columnIndex must be in [1..sideSizeInSquares]
@@ -173,12 +201,19 @@ public class BoardImpl implements Board {
         }
     }
 
+    /**
+     * For testing purposes only.
+     * Writes the ranks of contents of the matrix into a logger
+     *
+     * @param logger  where to write into
+     * @param message the message to write first before writing the contents of the board
+     */
     public void printBoard(Logger logger, String message) {
 
         logger.info(message);
         for (int i = 0; i < sideSizeInSquares; i++) {
             StringBuffer outputBuffer = new StringBuffer();
-            outputBuffer.append(i+1);
+            outputBuffer.append(i + 1);
             outputBuffer.append(":{");
             for (int j = 0; j < sideSizeInSquares; j++) {
                 if (currentBoard[i][j] != null) {

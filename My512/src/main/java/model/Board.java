@@ -24,8 +24,16 @@ public interface Board {
         LEFT, RIGHT, TOP, BOTTOM;
     }
 
+    /**
+     * Apply the only game action: packing tiles
+     * @param direction  where to push the tiles
+     */
     void packIntoDirection(Direction direction);
 
+    /**
+     * Validate the step effects
+     * NOTE: do we need this in the interface?
+     */
     void commit();
 
 
