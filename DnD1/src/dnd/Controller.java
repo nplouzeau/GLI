@@ -20,7 +20,7 @@ import java.util.ResourceBundle;
 public class Controller implements Initializable {
 
     // Acceptable suffixes for file payload in DnD
-    private List<String> validFileSuffixes = Arrays.asList(".jpg", ".gif", "png");
+    private List<String> validFileSuffixes = Arrays.asList(".jpg", ".jpeg", ".gif", "png");
 
     @FXML
     private Pane dndTarget;
@@ -32,14 +32,18 @@ public class Controller implements Initializable {
     void onDndOver(DragEvent event) {
 
         Background dndOkBackground =
-                new Background(new BackgroundFill(Paint.valueOf("green"), CornerRadii.EMPTY, Insets.EMPTY));
+            new Background(new BackgroundFill(Paint.valueOf("green"), CornerRadii.EMPTY, Insets.EMPTY));
+        Background dndErrBackground =
+            new Background(new BackgroundFill(Paint.valueOf("red"), CornerRadii.EMPTY, Insets.EMPTY));
         Dragboard dragBoard = event.getDragboard();
         if (dragBoard.hasFiles()
-                && (dragBoard.getFiles().size() == 1)
-                && (isAnAcceptableFileType(getFileNameFromBoard(dragBoard)))) {
+            && (dragBoard.getFiles().size() == 1)
+            && (isAnAcceptableFileType(getFileNameFromBoard(dragBoard)))) {
 
             messageArea.setText(getFileNameFromBoard(dragBoard));
             dndTarget.setBackground(dndOkBackground);
+        } else {
+            dndTarget.setBackground(dndErrBackground);
         }
     }
 
